@@ -6,19 +6,19 @@ import './App.css'
 function App() {
 
   let post = '역삼 우동 맛집'; //자료 잠깐 저장할 땐 변수 사용
-  // let [title1, state1] = useState('남자 코트 추천');
-  // let [title2, state2] = useState('강남 우동 맛집');
-  // let [title3, state3] = useState('파이썬독학');
   let [글제목, 글제목변경] = useState(['남자 코트 추천', '강남 우동 맛집', '파이썬독학']);
-  let [따봉, 따봉변경] = useState(0);
+  let [따봉, 따봉변경] = useState([0, 0, 0]);
   let [modal, setModal] = useState(false);
 
-
-  //자바스크립트 Destructuring 문법 : 배열 안에 있는 값을 각각 바인딩해주는 문법
-  let num = [1, 2];
-  let [a, c] = [1, 2];
-  // let a = num[0];
-  // let c = num[1];
+  /*  배열.map(콜백함수)
+    1. 배열의 길이 만큼 콜백함수 실행
+    2. 콜백함수의 매개변수로 배열의 값을 전달받을 수 있다.
+    3. 콜백함수의 리턴값을 새로운 배열에 저장해준다. (새로운 배열 길이 = 원본 배열 길이)
+  
+  [1, 2, 3].map(function(a) {
+    return '123';
+  })
+  */
 
   return (
     <div className="App">
@@ -26,10 +26,7 @@ function App() {
           <h4>ReactBlog</h4>
         </div>
 
-        <button onClick = { () => {
-          //let arr = [1, 2, 3]; // arr에는 [1, 2, 3]의 주소값만 저장된다.
-
-          // let copy = 글제목; // 얕은 복사
+        <button onClick = { () => {         
           let copy = [...글제목]; // 깊은 복사, ...(나열 연산자)
           copy[0] = '여자 코트 추천';
           글제목변경( copy );
@@ -42,7 +39,7 @@ function App() {
           가나다 정렬 버튼
         </button>
 
-        <div className="list">
+        {/* <div className="list">
           <h4>{ 글제목[0] } 
             <span onClick={ () => { 따봉변경(따봉+1) } }>👍</span> {따봉} </h4>
           <p>12월 19일 발행</p> 
@@ -55,14 +52,31 @@ function App() {
 
         <div className="list">
           <h4 onClick = { () => { 
-            if (modal == true) setModal(false)
-            else setModal(true)
+            setModal(!modal)
            }}>{ 글제목[2] }</h4>
           <p>12월 19일 발행</p>
-        </div>          
+        </div>           */}
         
         {
-          //html 중간에 조건문을 쓰려면 삼항연산자로 작성해야 한다.
+          글제목.map(function(a, i) {
+            return (
+              <div className="list" key={i}>
+                <h4>
+                  <span onClick = { () => { setModal(!modal) }}>
+                   { 글제목[i] }
+                  </span>
+                  
+                  <span onClick={ () => { 
+                    let 따봉복사 = [...따봉]; //원본 배열의 깊은 복사
+                    따봉복사[i] += 1;
+                    따봉변경(따봉복사); } }> 👍 </span> { 따봉[i] }
+                </h4>
+                <p>12월 19일 발행</p>
+              </div>)
+          })
+        }
+
+        {
           modal == true ? <Modal/> : null
         }
         
