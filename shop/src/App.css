@@ -5,6 +5,15 @@
   text-align: center;
 }
 
+/* 대문 */
+.main-bg {
+  height: 300px;
+  /* background-image: url('./img/bg2.gif'); */
+  background-size: cover;
+  background-position: center;
+}
+
+/* 
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -39,4 +48,4 @@
 
 .read-the-docs {
   color: #888;
-}
+} */
