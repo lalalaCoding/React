@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './App.css'
+import './App.module.css'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Navbar, Container, Nav, Row, Col} from 'react-bootstrap';
 //import 작명 from '이미지경로';

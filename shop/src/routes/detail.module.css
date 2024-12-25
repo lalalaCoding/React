@@ -1,0 +1,16 @@
+.amout_input {
+    display: inline;
+    width: 200px;
+}
+
+.alert_div {
+    background: red;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    /* height: 50px; */
+    padding: 20px;
+    margin: 10px;
+    color: white;
+    font-size: 25px;
+}
