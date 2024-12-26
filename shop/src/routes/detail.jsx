@@ -1,4 +1,4 @@
-import {Container, Row, Col, Button, Form } from 'react-bootstrap'
+import {Container, Row, Col, Button, Form, Nav } from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useEffect, Component, useState } from 'react';
@@ -118,35 +118,76 @@ function No_Product_Detail () {
 
 function Yes_Product_Detail (props) {
 
+    let [tab, setTab] = useState(0);
+
     return (
-        <Row>
-            <Box>
-                <YellowBtn bg="blue">버튼</YellowBtn>
-                <YellowBtn bg="orange">버튼</YellowBtn>
-            </Box>
-            <Col>
-                <img src={props.select_item_img} width="100%" />
-            </Col>
-            <Col>
-                <h4 className="pt-5">{props.select_item.title}</h4>
-                <p>{props.select_item.content}</p>
-                <p>{props.select_item.price}원</p>
+        <>
+            <Row>
+                <Box>
+                    <YellowBtn bg="blue">버튼</YellowBtn>
+                    <YellowBtn bg="orange">버튼</YellowBtn>
+                </Box>
+                <Col>
+                    <img src={props.select_item_img} width="100%"/>
+                </Col>
+                <Col>
+                    <h4 className="pt-5">{props.select_item.title}</h4>
+                    <p>{props.select_item.content}</p>
+                    <p>{props.select_item.price}원</p>
 
-                {
-                    props.isNumber == false ? 
-                    <div className={styles.alert_div}>경고: 숫자만 입력하세요.</div>
-                    : null
-                }
-                <Form.Control type="text" className={styles.amout_input} onChange={e => {
-                    props.changeAmount(e.target.value);
-                }}/>
-                &nbsp;&nbsp;
+                    {
+                        props.isNumber == false ? 
+                        <div className={styles.alert_div}>경고: 숫자만 입력하세요.</div>
+                        : null
+                    }
+                    <Form.Control type="text" className={styles.amout_input} onChange={e => {
+                        props.changeAmount(e.target.value);
+                    }}/>
+                    &nbsp;&nbsp;
 
-                <Button variant="danger">주문하기</Button>
-            </Col>
-        </Row>
+                    <Button variant="danger">주문하기</Button>
+                </Col>
+            </Row>
+
+            {/* 동적 UI 탭 */}
+            <Nav variant="tabs" defaultActiveKey="link1">
+                <Nav.Item>
+                    <Nav.Link eventKey="link1" onClick={() => {setTab(0);}}>버튼0</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="link2" onClick={() => {setTab(1);}}>버튼1</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link eventKey="link3" onClick={() => {setTab(2);}}>버튼2</Nav.Link>
+                </Nav.Item>
+            </Nav>
+            
+            <TabContent tab={tab}/>
+         </>
     )
 }
+
+function TabContent({tab, 프롭스2}) { //== 핵심 ==//
+    if (tab == 0) {
+        return (<div className={styles.descript_div}>내용0</div>)
+    }
+    if (tab == 1) {
+        return (<div className={styles.descript_div}>내용1</div>)
+    }
+    if (tab == 2) {
+        return (<div className={styles.descript_div}>내용2</div>)
+    }
+
+    // return (
+    //     [<div className={styles.descript_div}>내용0</div>,
+    //         <div className={styles.descript_div}>내용1</div>,
+    //         <div className={styles.descript_div}>내용2</div>][tab]
+    // )
+
+
+
+}
+
 
 
 

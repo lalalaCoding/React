@@ -22,3 +22,15 @@
 #아-이디 {
     background: pink;
 }
+
+.descript_btn {
+    width: 200px;
+    display: inline;
+    margin: 5px;
+}
+.descript_div{
+    width: 620px;
+    height: 200px;
+    background: lightgray;
+    margin: 5px;
+}
