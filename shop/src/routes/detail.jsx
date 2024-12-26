@@ -53,7 +53,11 @@ function Product_Detail (props) {
     }
 
     useEffect(() => {
-        let a = setTimeout(() => { setDisplay('none') }, 2000); //스위치 조작
+        let a;
+        if (display != 'none') {
+            a = setTimeout(() => { setDisplay('none') }, 2000); //스위치 조작
+        }
+        
         setIsNumber(!isNaN(amount));
 
         return () => {
@@ -76,6 +80,10 @@ function Product_Detail (props) {
 
     return (
         <Container>
+            <div id={styles.아이디}>아이디</div>
+            <div id={styles['아-이디']}>아-이디</div>
+            
+
             {/* 2초가 지나면 아래 div가 사라지게 해보기 */}
             <div className="alert alert-warning" style={{display: display}}>
                 2초 이내 구매 시 할인

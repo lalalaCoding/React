@@ -14,3 +14,11 @@
     color: white;
     font-size: 25px;
 }
+
+#아이디 {
+    background: greenyellow;
+}
+
+#아-이디 {
+    background: pink;
+}
