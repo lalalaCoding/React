@@ -1,8 +1,12 @@
 import {Container, Row, Col, Button, Form, Nav } from 'react-bootstrap'
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { useEffect, Component, useState } from 'react';
+import { useEffect, Component, useState, useContext } from 'react';
 import styles from './detail.module.css';
+
+import {Context1} from './../App.jsx'; //컨텍스트(보관함) 가져오기
+
+
 
 //컴포넌트의 Lifecycle
 //mount(페이지에 장착), update(페이지에서 수정), unmount(페이지에서 제거)
@@ -39,6 +43,10 @@ let Box = styled.div`
 //상품 상세보기 컴포넌트
 function Product_Detail (props) {
     
+    //Destructuring 문법
+    let {재고} = useContext(Context1) //보관함 해체해주는 함수: 반환 값은 객체 타입
+    
+
     let [display, setDisplay] = useState('block');
     let [count, setCount] = useState(0);
     let [amount, setAmount] = useState('');
@@ -80,10 +88,6 @@ function Product_Detail (props) {
 
     return (
         <Container>
-            <div id={styles.아이디}>아이디</div>
-            <div id={styles['아-이디']}>아-이디</div>
-            
-
             {/* 2초가 지나면 아래 div가 사라지게 해보기 */}
             <div className="alert alert-warning" style={{display: display}}>
                 2초 이내 구매 시 할인
@@ -96,7 +100,7 @@ function Product_Detail (props) {
                 <No_Product_Detail />
                 : <Yes_Product_Detail 
                     select_item={select_item} select_item_img={select_item_img} 
-                    isNumber={isNumber} changeAmount={changeAmount} shoes={props.shoes}/>   
+                    isNumber={isNumber} changeAmount={changeAmount}/>   
             }
         </Container>
     )
@@ -129,6 +133,7 @@ function Yes_Product_Detail (props) {
             setFade('');
         }
     }, []);
+
 
     return (
         <>
@@ -172,23 +177,15 @@ function Yes_Product_Detail (props) {
                 </Nav.Item>
             </Nav>
             
-            <TabContent tab={tab} shoes={props.shoes}/>
+            <TabContent tab={tab}/>
          </>
     )
 }
 
-function TabContent({tab, shoes}) { //== 핵심 ==//
-    // if (tab == 0) {
-    //     return (<div className={styles.descript_div}>내용0</div>)
-    // }
-    // if (tab == 1) {
-    //     return (<div className={styles.descript_div}>내용1</div>)
-    // }
-    // if (tab == 2) {
-    //     return (<div className={styles.descript_div}>내용2</div>)
-    // }
-
+function TabContent({tab}) { //== 핵심 ==//
+    
     let [fade, setFade] = useState('');
+    let {재고} = useContext(Context1);
 
     useEffect(() => {
         let a = setTimeout(() => {setFade('end');}, 100); //오토매틱 배칭을 회피하기 위한 타이머
@@ -203,9 +200,7 @@ function TabContent({tab, shoes}) { //== 핵심 ==//
         <>
             <div className={`start ${fade}`}>
                 {
-                    [<div className={`${styles.descript_div}`}>
-                        {shoes[0].title}
-                    </div>,
+                    [<div className={`${styles.descript_div}`}>내용0</div>,
                     <div className={styles.descript_div}>내용1</div>,
                     <div className={styles.descript_div}>내용2</div>][tab]
                 }
@@ -213,5 +208,9 @@ function TabContent({tab, shoes}) { //== 핵심 ==//
         </>
     )
 }
+
+
+
+
 
 export default Product_Detail

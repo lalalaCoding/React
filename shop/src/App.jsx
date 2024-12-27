@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, createContext } from 'react'
 import './App.css'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Navbar, Container, Nav, Row, Col} from 'react-bootstrap';
@@ -9,11 +9,18 @@ import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import Product_Detail from './routes/detail.jsx'
 import { ShopEvent, FirstEvent, BirthEvent } from './routes/event.jsx';
 import axios from 'axios';
+import Cart from './routes/Cart.jsx'
+
+//Context(스테이트 보관함) API 사용해보기
+export let Context1 = createContext();
+
 
 
 function App() {
   
   let [shoes, setShoes] = useState(data); //객체 배열
+  let [재고] = useState([10, 11, 12]); //
+
   let [isLoading, setIsLoading] = useState(false);
   let [clickCount, setClickCount] = useState(0);
   let shoes_count_arr = [];
@@ -57,7 +64,17 @@ function App() {
                                             isLoading={isLoading} change_isLoading={change_isLoading}
                                             clickCount={clickCount} change_clickCount={change_clickCount}/>} />
         
-        <Route path="/detail/:id" element={<Product_Detail shoes={shoes} item_image={item_image}/>} />
+        <Route path="/detail/:id" element={
+          <Context1.Provider value={{ 재고 }}>
+            <Product_Detail shoes={shoes} item_image={item_image}/>
+          </Context1.Provider>
+          } />
+
+        {/* 장바구니 */}
+        <Route path="/cart" element={
+          <Cart></Cart>
+        } />
+
 
         <Route path="/about" element={<About />}>
           <Route path="member" element={<div>멤버임</div>}/>
