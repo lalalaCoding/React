@@ -96,7 +96,7 @@ function Product_Detail (props) {
                 <No_Product_Detail />
                 : <Yes_Product_Detail 
                     select_item={select_item} select_item_img={select_item_img} 
-                    isNumber={isNumber} changeAmount={changeAmount}/>   
+                    isNumber={isNumber} changeAmount={changeAmount} shoes={props.shoes}/>   
             }
         </Container>
     )
@@ -119,10 +119,20 @@ function No_Product_Detail () {
 function Yes_Product_Detail (props) {
 
     let [tab, setTab] = useState(0);
+    let [fade, setFade] = useState('');
+
+    useEffect(() => {
+        let a = setTimeout(()=>{setFade('end');}, 100);
+
+        return () => {
+            clearTimeout(a);
+            setFade('');
+        }
+    }, []);
 
     return (
         <>
-            <Row>
+            <Row className={`start ${fade}`}>
                 <Box>
                     <YellowBtn bg="blue">버튼</YellowBtn>
                     <YellowBtn bg="orange">버튼</YellowBtn>
@@ -162,34 +172,46 @@ function Yes_Product_Detail (props) {
                 </Nav.Item>
             </Nav>
             
-            <TabContent tab={tab}/>
+            <TabContent tab={tab} shoes={props.shoes}/>
          </>
     )
 }
 
-function TabContent({tab, 프롭스2}) { //== 핵심 ==//
-    if (tab == 0) {
-        return (<div className={styles.descript_div}>내용0</div>)
-    }
-    if (tab == 1) {
-        return (<div className={styles.descript_div}>내용1</div>)
-    }
-    if (tab == 2) {
-        return (<div className={styles.descript_div}>내용2</div>)
-    }
+function TabContent({tab, shoes}) { //== 핵심 ==//
+    // if (tab == 0) {
+    //     return (<div className={styles.descript_div}>내용0</div>)
+    // }
+    // if (tab == 1) {
+    //     return (<div className={styles.descript_div}>내용1</div>)
+    // }
+    // if (tab == 2) {
+    //     return (<div className={styles.descript_div}>내용2</div>)
+    // }
 
-    // return (
-    //     [<div className={styles.descript_div}>내용0</div>,
-    //         <div className={styles.descript_div}>내용1</div>,
-    //         <div className={styles.descript_div}>내용2</div>][tab]
-    // )
+    let [fade, setFade] = useState('');
 
+    useEffect(() => {
+        let a = setTimeout(() => {setFade('end');}, 100); //오토매틱 배칭을 회피하기 위한 타이머
+        
+        return () => {
+            clearTimeout(a);
+            setFade('');
+        }
+    }, [tab])
 
-
+    return (
+        <>
+            <div className={`start ${fade}`}>
+                {
+                    [<div className={`${styles.descript_div}`}>
+                        {shoes[0].title}
+                    </div>,
+                    <div className={styles.descript_div}>내용1</div>,
+                    <div className={styles.descript_div}>내용2</div>][tab]
+                }
+            </div>
+        </>
+    )
 }
-
-
-
-
 
 export default Product_Detail

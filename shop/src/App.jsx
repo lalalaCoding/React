@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styles from './App.module.css'
+import './App.css'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Navbar, Container, Nav, Row, Col} from 'react-bootstrap';
 //import 작명 from '이미지경로';
@@ -91,17 +91,17 @@ function MainPage(props) {
   console.log(props.shoes_count_arr)
   return (
     <>
-      <div className={styles['main-bg']} style={{backgroundImage : 'url(' + bg + ')'}}></div>
+      <div className="main-bg" style={{backgroundImage : 'url(' + bg + ')'}}></div>
       { 
         props.isLoading == true ?
-          <div className={styles.loading}>로딩 중 입니다.</div>
+          <div className="loading">로딩 중 입니다.</div>
           : null
       }
       <Container>
         {   
             props.shoes_count_arr.map((a, i) => {
               return (
-                <Row>
+                <Row key={i}>
                   { //상품 목록 출력
                     props.shoes.map(function(item, index) {
                       
