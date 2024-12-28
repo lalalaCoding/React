@@ -1,15 +1,24 @@
 import {Table, Button} from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeName, changeAge } from './../store/userSlice.js'
+import { changeCount } from './../store/cartSlice.js'
 
 //장바구니 컴포넌트
 function Cart() {
 
     //Redux Store를 가져와주는 훅
     let a = useSelector((state) => { return state; })
-    console.log(a);
+    let dispatch = useDispatch(); //store.js에게 요청을 보내주는 훅훅
+
 
     return (
         <div>
+            <h5>
+                {a.user.name}의 장바구니({a.user.age})
+                <button onClick={() => {dispatch(changeName())}}>이름변경</button>
+                <button onClick={() => {dispatch(changeAge(100))}}>나이변경</button>
+            </h5>
+
             <Table>
                 <thead>
                     <tr>
@@ -24,10 +33,14 @@ function Cart() {
                         a.cart.map((a, i) => {
                             return (
                                 <tr key={i}>
-                                    <td>{i + 1}</td>
+                                    <td>{a.id}</td>
                                     <td>{a.name}</td>
                                     <td>{a.count}</td>
-                                    <td><Button>변경하기</Button></td>
+                                    <td><Button onClick={(e) => {
+                                        let pNo = e.target.parentElement.parentElement.children[0].innerText;
+                                        console.log(pNo)
+                                        dispatch(changeCount(pNo));
+                                    }}>+</Button></td>
                                 </tr>
                             )
                         })

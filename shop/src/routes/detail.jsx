@@ -1,26 +1,12 @@
 import {Container, Row, Col, Button, Form, Nav } from 'react-bootstrap'
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useEffect, Component, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import styles from './detail.module.css';
 
 import {Context1} from './../App.jsx'; //컨텍스트(보관함) 가져오기
-
-
-
-//컴포넌트의 Lifecycle
-//mount(페이지에 장착), update(페이지에서 수정), unmount(페이지에서 제거)
-class Detail extends Component { //과거에 사용하던 클래스형 컴포넌트
-    componentDidMount() {
-        //컴포넌트 mount 시 코드 실행부
-    }
-    componentDidUpdate() {
-        //컴포넌트 update 시 코드 실행부
-    }
-    componentDidUnmount() {
-        //컴포넌트 unmount 시 코드 실행부
-    }
-}
+import { useDispatch } from 'react-redux';
+import { addCart } from './../store/cartSlice.js'
 
 //스타일이 적용된 컴포넌트를 생성해주는 문법(라이브러리)
 let YellowBtn = styled.button`
@@ -100,7 +86,7 @@ function Product_Detail (props) {
                 <No_Product_Detail />
                 : <Yes_Product_Detail 
                     select_item={select_item} select_item_img={select_item_img} 
-                    isNumber={isNumber} changeAmount={changeAmount}/>   
+                    isNumber={isNumber} changeAmount={changeAmount} amount={amount}/>   
             }
         </Container>
     )
@@ -122,6 +108,9 @@ function No_Product_Detail () {
 
 function Yes_Product_Detail (props) {
 
+    let dispatch = useDispatch();
+    let navigate = useNavigate();
+
     let [tab, setTab] = useState(0);
     let [fade, setFade] = useState('');
 
@@ -133,7 +122,6 @@ function Yes_Product_Detail (props) {
             setFade('');
         }
     }, []);
-
 
     return (
         <>
@@ -160,7 +148,20 @@ function Yes_Product_Detail (props) {
                     }}/>
                     &nbsp;&nbsp;
 
-                    <Button variant="danger">주문하기</Button>
+                    <Button variant="danger" onClick={() => {
+                        let 주문수량 = Number(props.amount);
+                        let 주문상품 = props.select_item;
+                        
+                        //주문상품과 주문수량을 store.js에 전달
+                        let 주문객체 = {
+                            id: 주문상품.id,
+                            name: 주문상품.title,
+                            count: 주문수량
+                        };
+
+                        dispatch(addCart(주문객체));
+                        navigate('/cart');
+                    }}>주문하기</Button>
                 </Col>
             </Row>
 

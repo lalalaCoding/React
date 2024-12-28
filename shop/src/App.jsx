@@ -50,7 +50,7 @@ function App() {
         <Container>
           <Navbar.Brand onClick={() => { navigate('/')}}>React Shop</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link onClick={() => { navigate('/product') }}>Product</Nav.Link>
+            <Nav.Link onClick={() => { navigate('/cart') }}>Cart</Nav.Link>
             <Nav.Link onClick={ () => { navigate('/detail') }}>Detail</Nav.Link>
             <Nav.Link href="#MyInfo">MyInfo</Nav.Link>
           </Nav>
