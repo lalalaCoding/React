@@ -1,7 +1,7 @@
 import {Table, Button} from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { changeName, changeAge } from './../store/userSlice.js'
-import { changeCount } from './../store/cartSlice.js'
+import { changeCount, removeCart } from './../store/cartSlice.js'
 
 //장바구니 컴포넌트
 function Cart() {
@@ -36,11 +36,19 @@ function Cart() {
                                     <td>{a.id}</td>
                                     <td>{a.name}</td>
                                     <td>{a.count}</td>
-                                    <td><Button onClick={(e) => {
-                                        let pNo = e.target.parentElement.parentElement.children[0].innerText;
-                                        console.log(pNo)
-                                        dispatch(changeCount(pNo));
-                                    }}>+</Button></td>
+                                    <td>
+                                        <Button onClick={(e) => {
+                                            let pNo = e.target.parentElement.parentElement.children[0].innerText;
+                                            console.log(pNo)
+                                            dispatch(changeCount(pNo));
+                                        }}>+</Button>
+
+                                        <Button variant='danger' onClick={(e) => {
+                                            let pNo = e.target.parentElement.parentElement.children[0].innerText;    
+                                            dispatch(removeCart(pNo));
+                                        }}>
+                                        삭제</Button>
+                                    </td>
                                 </tr>
                             )
                         })
