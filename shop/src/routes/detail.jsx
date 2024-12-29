@@ -47,6 +47,12 @@ function Product_Detail (props) {
     }
 
     useEffect(() => {
+        // Detail 페이지에 접속 -> 해당 페이지의 상품id를 가져와서 localStorage의 watched 항목에 추가
+        let watched = JSON.parse(localStorage.getItem('watched'));
+        watched.unshift(select_item.id);
+        let set_watched = [...new Set(watched)]; //배열->Set->배열
+        localStorage.setItem('watched', JSON.stringify(set_watched));
+
         let a;
         if (display != 'none') {
             a = setTimeout(() => { setDisplay('none') }, 2000); //스위치 조작
@@ -55,8 +61,6 @@ function Product_Detail (props) {
         setIsNumber(!isNaN(amount));
 
         return () => {
-            //useEffect가 동작 전에 실행 될 코드 작성 (clean up fuction 이라고 부름)
-            //mount시 실행X, unmount시 실행O
             clearTimeout(a); //기존 코드 제거
         }
     }, [amount])
@@ -86,7 +90,8 @@ function Product_Detail (props) {
                 <No_Product_Detail />
                 : <Yes_Product_Detail 
                     select_item={select_item} select_item_img={select_item_img} 
-                    isNumber={isNumber} changeAmount={changeAmount} amount={amount}/>   
+                    isNumber={isNumber} changeAmount={changeAmount} amount={amount}
+                    />   
             }
         </Container>
     )
@@ -107,7 +112,7 @@ function No_Product_Detail () {
 }
 
 function Yes_Product_Detail (props) {
-
+    
     let dispatch = useDispatch();
     let navigate = useNavigate();
 

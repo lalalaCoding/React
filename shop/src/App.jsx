@@ -1,4 +1,4 @@
-import { useState, createContext } from 'react'
+import { useState, createContext, useEffect } from 'react'
 import './App.css'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Navbar, Container, Nav, Row, Col} from 'react-bootstrap';
@@ -10,6 +10,7 @@ import Product_Detail from './routes/detail.jsx'
 import { ShopEvent, FirstEvent, BirthEvent } from './routes/event.jsx';
 import axios from 'axios';
 import Cart from './routes/Cart.jsx'
+import {useQuery} from 'react-query'
 
 //Context(스테이트 보관함) API 사용해보기
 export let Context1 = createContext();
@@ -18,6 +19,17 @@ export let Context1 = createContext();
 
 function App() {
   
+  useEffect(() => {
+    if (localStorage.getItem('watched') == null) {
+      localStorage.setItem('watched', JSON.stringify([]));  
+    }
+  }, []);
+
+  let obj = {name: 'kim', age: 20};
+  localStorage.setItem('data', JSON.stringify(obj)); //객체, 배열 -> JSON
+  let 꺼낸거 = localStorage.getItem('data');
+  console.log(JSON.parse(꺼낸거)); //JSON -> 객체, 배열
+
   let [shoes, setShoes] = useState(data); //객체 배열
   let [재고] = useState([10, 11, 12]); //
 
@@ -44,7 +56,23 @@ function App() {
     setClickCount(value);
   }
 
+  let result = useQuery('작명', () => {
+    return axios.get('https://codingapple1.github.io/userdata.json')
+          .then((a) => {
+            console.log('요청함'); //refetch
+            return a.data
+          })
+  });
+  /*
+    result.data : 서버로 부터 응답받은 데이터
+    result.loading : 로딩 중인지 여부
+    result.error : 요청 실패 여부
+  */
+  console.log(result)
+
+
   return (
+    <>
     <div className="App">
       <Navbar bg="dark" data-bs-theme="dark">
         <Container>
@@ -54,6 +82,12 @@ function App() {
             <Nav.Link onClick={ () => { navigate('/detail') }}>Detail</Nav.Link>
             <Nav.Link href="#MyInfo">MyInfo</Nav.Link>
           </Nav>
+
+          <Navbar.Brand>
+            { result.isLoading && '로딩중' }
+            { result.error && '에러남' }
+            { result.data && result.data.name }
+          </Navbar.Brand>
         </Container>
       </Navbar>
 
@@ -89,7 +123,20 @@ function App() {
         <Route path="*" element={<div>없는페이지요</div>}/>
       </Routes>
 
-    </div>    
+    </div>   
+    
+    <div>
+      최근 본 상품
+      {
+        JSON.parse(localStorage.getItem('watched')).map((a, i) => {
+          return (
+            <p>{shoes[a].title}</p>
+          )
+        })
+      }
+    </div>
+
+    </>
   )
 }
 
