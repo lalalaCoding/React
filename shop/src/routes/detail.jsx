@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useEffect, useState, useContext } from 'react';
 import styles from './detail.module.css';
 
-import {Context1} from './../App.jsx'; //컨텍스트(보관함) 가져오기
 import { useDispatch } from 'react-redux';
 import { addCart } from './../store/cartSlice.js'
 
@@ -29,8 +28,7 @@ let Box = styled.div`
 //상품 상세보기 컴포넌트
 function Product_Detail (props) {
     
-    //Destructuring 문법
-    let {재고} = useContext(Context1) //보관함 해체해주는 함수: 반환 값은 객체 타입
+    
     
 
     let [display, setDisplay] = useState('block');
@@ -191,7 +189,7 @@ function Yes_Product_Detail (props) {
 function TabContent({tab}) { //== 핵심 ==//
     
     let [fade, setFade] = useState('');
-    let {재고} = useContext(Context1);
+    
 
     useEffect(() => {
         let a = setTimeout(() => {setFade('end');}, 100); //오토매틱 배칭을 회피하기 위한 타이머
@@ -214,9 +212,5 @@ function TabContent({tab}) { //== 핵심 ==//
         </>
     )
 }
-
-
-
-
 
 export default Product_Detail

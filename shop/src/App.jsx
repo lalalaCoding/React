@@ -1,4 +1,4 @@
-import { useState, createContext, useEffect } from 'react'
+import { useState, createContext, useEffect, lazy, Suspense } from 'react'
 import './App.css'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Navbar, Container, Nav, Row, Col} from 'react-bootstrap';
@@ -6,21 +6,24 @@ import { Button, Navbar, Container, Nav, Row, Col} from 'react-bootstrap';
 import bg from './img/bg2.gif';
 import {data, imgPath} from './data.js'
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
-import Product_Detail from './routes/detail.jsx'
 import { ShopEvent, FirstEvent, BirthEvent } from './routes/event.jsx';
 import axios from 'axios';
-import Cart from './routes/Cart.jsx'
+// import Product_Detail from './routes/detail.jsx'
+// import Cart from './routes/Cart.jsx'
 import {useQuery} from 'react-query'
 
-//Context(스테이트 보관함) API 사용해보기
-export let Context1 = createContext();
+//Lazy Import 설정: 빌드 시에 별도의 js 파일로 분리된다.
+//콜백 함수에서 중괄호가 반드시 없어야 함
+//improt 하는 모듈은 export default로 내보내져야 함
+const Product_Detail = lazy(() => import('./routes/detail.jsx'))
+const Cart = lazy(() => import('./routes/Cart.jsx'))
 
 
 
 function App() {
   
   useEffect(() => {
-    if (localStorage.getItem('watched') == null) {
+    if (localStorage.getItem('watched') === null) {
       localStorage.setItem('watched', JSON.stringify([]));  
     }
   }, []);
@@ -91,44 +94,45 @@ function App() {
         </Container>
       </Navbar>
 
-      <Routes>
-        <Route path="/" element={<MainPage shoes={shoes} change_shoes={change_shoes} 
-                                            item_image={item_image} change_item_image={change_item_image} 
-                                            navigate={navigate} shoes_count_arr={shoes_count_arr}
-                                            isLoading={isLoading} change_isLoading={change_isLoading}
-                                            clickCount={clickCount} change_clickCount={change_clickCount}/>} />
-        
-        <Route path="/detail/:id" element={
-          <Context1.Provider value={{ 재고 }}>
-            <Product_Detail shoes={shoes} item_image={item_image}/>
-          </Context1.Provider>
+
+      <Suspense fallback={<div>로딩중임</div>}>
+        <Routes>
+          <Route path="/" element={<MainPage shoes={shoes} change_shoes={change_shoes} 
+                                              item_image={item_image} change_item_image={change_item_image} 
+                                              navigate={navigate} shoes_count_arr={shoes_count_arr}
+                                              isLoading={isLoading} change_isLoading={change_isLoading}
+                                              clickCount={clickCount} change_clickCount={change_clickCount}/>} />
+          
+          <Route path="/detail/:id" element={
+              <Product_Detail shoes={shoes} item_image={item_image}/>
+            } />
+
+          {/* 장바구니 */}
+          <Route path="/cart" element={
+              <Cart />
           } />
 
-        {/* 장바구니 */}
-        <Route path="/cart" element={
-          <Cart></Cart>
-        } />
 
+          <Route path="/about" element={<About />}>
+            <Route path="member" element={<div>멤버임</div>}/>
+            <Route path="location" element={<div>위치임</div>}/>
+          </Route>
 
-        <Route path="/about" element={<About />}>
-          <Route path="member" element={<div>멤버임</div>}/>
-          <Route path="location" element={<div>위치임</div>}/>
-        </Route>
+          <Route path="/event" element={ <ShopEvent /> }>
+            <Route path="one" element={ <FirstEvent /> } />
+            <Route path="two" element={ <BirthEvent /> }/>
+          </Route>
 
-        <Route path="/event" element={ <ShopEvent /> }>
-          <Route path="one" element={ <FirstEvent /> } />
-          <Route path="two" element={ <BirthEvent /> }/>
-        </Route>
-
-        <Route path="*" element={<div>없는페이지요</div>}/>
-      </Routes>
+          <Route path="*" element={<div>없는페이지요</div>}/>
+        </Routes>
+      </Suspense>
 
     </div>   
     
     <div>
       최근 본 상품
       {
-        JSON.parse(localStorage.getItem('watched')).map((a, i) => {
+        localStorage.getItem('watched') != null && JSON.parse(localStorage.getItem('watched')).map((a, i) => {
           return (
             <p>{shoes[a].title}</p>
           )
