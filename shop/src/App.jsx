@@ -17,7 +17,7 @@ import {useQuery} from 'react-query'
 //improt 하는 모듈은 export default로 내보내져야 함
 const Product_Detail = lazy(() => import('./routes/detail.jsx'))
 const Cart = lazy(() => import('./routes/Cart.jsx'))
-
+const Info = lazy(() => import('./routes/Info.jsx'))
 
 
 function App() {
@@ -83,7 +83,7 @@ function App() {
           <Nav className="me-auto">
             <Nav.Link onClick={() => { navigate('/cart') }}>Cart</Nav.Link>
             <Nav.Link onClick={ () => { navigate('/detail') }}>Detail</Nav.Link>
-            <Nav.Link href="#MyInfo">MyInfo</Nav.Link>
+            <Nav.Link onClick={() => { navigate('/info')}}>MyInfo</Nav.Link>
           </Nav>
 
           <Navbar.Brand>
@@ -111,6 +111,8 @@ function App() {
           <Route path="/cart" element={
               <Cart />
           } />
+
+          <Route path="/info" element={<Info />} />
 
 
           <Route path="/about" element={<About />}>
