@@ -7,6 +7,9 @@ import styles from './detail.module.css';
 import { useDispatch } from 'react-redux';
 import { addCart } from './../store/cartSlice.js'
 
+import { useLike } from './../hooks/like.js'
+import { useUserName } from '../hooks/username.js';
+
 //스타일이 적용된 컴포넌트를 생성해주는 문법(라이브러리)
 let YellowBtn = styled.button`
     background: ${ props => props.bg };
@@ -24,6 +27,7 @@ let Box = styled.div`
     background: grey;
     padding: 20px;
 `;
+
 
 //상품 상세보기 컴포넌트
 function Product_Detail (props) {
@@ -117,6 +121,11 @@ function Yes_Product_Detail (props) {
     let [tab, setTab] = useState(0);
     let [fade, setFade] = useState('');
 
+    //커스텀 훅: useXXX 함수들은 컴포넌트 내부이면서 JSX 외부에서만 사용가능함!
+    let [like, addLike] = useLike();
+    let [username, isError] = useUserName();
+    //console.log(username);
+
     useEffect(() => {
         let a = setTimeout(()=>{setFade('end');}, 100);
 
@@ -128,6 +137,9 @@ function Yes_Product_Detail (props) {
 
     return (
         <>
+            {
+                isError ? <h3>{username}</h3> : <h3>'서비스 요청 실패'</h3> 
+            }
             <Row className={`start ${fade}`}>
                 <Box>
                     <YellowBtn bg="blue">버튼</YellowBtn>
@@ -137,7 +149,10 @@ function Yes_Product_Detail (props) {
                     <img src={props.select_item_img} width="100%"/>
                 </Col>
                 <Col>
-                    <h4 className="pt-5">{props.select_item.title}</h4>
+                    <h4 className="pt-5">
+                        {props.select_item.title} | {like}
+                        <span onClick={() => { addLike() }}>❤️</span>
+                    </h4>
                     <p>{props.select_item.content}</p>
                     <p>{props.select_item.price}원</p>
 
